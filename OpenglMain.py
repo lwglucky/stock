@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # This is statement is required by the build system to query build info
 if __name__ == '__build__':
@@ -7,9 +7,15 @@ if __name__ == '__build__':
 import sys
 import common
 
+from shaderProg import ShaderProgram
+
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+
+from OpenGL.GL.ARB.shader_objects import *
+from OpenGL.GL.ARB.fragment_shader import *
+from OpenGL.GL.ARB.vertex_shader import *
 
 sph = common.sphere(16,16,1)
 camera = common.camera()
@@ -23,7 +29,7 @@ def InitGL(width, height):
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     gluPerspective(45.0, float(width) / float(height), 0.1, 100.0)
-    camera.move(0.0, 3.0, -5)
+    camera.move(0.0, 3.0, -15)
 
 
 def DrawGLScene():
