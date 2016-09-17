@@ -7,8 +7,6 @@ if __name__ == '__build__':
 import sys
 import common
 
-from shaderProg import ShaderProgram
-
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
@@ -17,6 +15,10 @@ from OpenGL.GL.ARB.shader_objects import *
 from OpenGL.GL.ARB.fragment_shader import *
 from OpenGL.GL.ARB.vertex_shader import *
 
+from OpenGL.GL import shaders
+from ctypes import *
+from OpenGL.GL.shaders import ShaderProgram
+
 sph = common.sphere(16,16,1)
 camera = common.camera()
 plane = common.plane(12,12,1.,1.)
@@ -24,6 +26,8 @@ plane = common.plane(12,12,1.,1.)
 
 def InitGL(width, height):
     glClearColor(0.1, 0.1, 0.5, 0.1)
+    glEnable(GL_DEPTH_TEST)
+    glShadeModel(GL_SMOOTH)
     glClearDepth(1.0)
 #    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
     glMatrixMode(GL_PROJECTION)
@@ -48,6 +52,20 @@ def DrawGLScene():
     sph.draw()
     glutSwapBuffers()
 
+def InitShaders():
+    global sP
+    sP = ShaderProgram()
+    sP.addShader(GL_VERTEX_SHADER_ARB, "v.vert")
+    sP.addShader(GL_FRAGMENT_SHADER_ARB, "f.frag")
+    sP.linkShaders()
+    sP.enable()
+    glUniform1fARB(sP.indexOfUniformVariable("Amplitude"), 0.3)
+    glUniform3fvARB(sP.indexOfUniformVariable("LightPosition"), 1,   (0.0, 0.0, 3.0))
+    glUniform3fvARB(sP.indexOfUniformVariable("BrickColor"), 1,   (1.0, 0.3, 0.2))
+    glUniform3fvARB(sP.indexOfUniformVariable("MortarColor"), 1, (0.85, 0.86, 0.84))
+    glUniform2fvARB(sP.indexOfUniformVariable("BrickSize"), 1,  (0.3, 0.15))
+    glUniform2fvARB(sP.indexOfUniformVariable("BrickPct"), 1, \
+                    (0.9, 0.85))
 
 def mouseButton(button, mode, x, y):
     if button == GLUT_RIGHT_BUTTON:
