@@ -4,60 +4,75 @@
 if __name__ == '__build__':
 	raise Exception
 
-
-
 import sys
+import common
 
-try:
-  from OpenGL.GLUT import *
-  from OpenGL.GL import *
-  from OpenGL.GLU import *
-except:
-  print '''
-ERROR: PyOpenGL not installed properly.
-        '''
-  sys.exit()
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+
+sph = common.sphere(16,16,1)
+camera = common.camera()
+plane = common.plane(12,12,1.,1.)
 
 
-def display():
-   # clear all pixels
-   glClear (GL_COLOR_BUFFER_BIT)
+def InitGL(width, height):
+    glClearColor(0.1, 0.1, 0.5, 0.1)
+    glClearDepth(1.0)
+#    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(45.0, float(width) / float(height), 0.1, 100.0)
+    camera.move(0.0, 3.0, -5)
 
-   # draw white polygon (rectangle) with corners at
-   # (0.25, 0.25, 0.0) and (0.75, 0.75, 0.0)
-   glColor3f (1.0, 1.0, 1.0)
-   glBegin(GL_POLYGON)
-   glVertex3f (0.25, 0.25, 0.0)
-   glVertex3f (0.75, 0.25, 0.0)
-   glVertex3f (0.75, 0.75, 0.0)
-   glVertex3f (0.25, 0.75, 0.0)
-   glEnd()
 
-   # don't wait!
-   # start processing buffered OpenGL routines
-   glFlush ();
+def DrawGLScene():
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_MODELVIEW)
+    camera.setLookat()
+    plane.draw()
+    glTranslatef(-1.5, 0.0, 0.0)
+    glBegin(GL_QUADS)
+    glVertex3f(-1.0, 1.0, 0.0)
+    glVertex3f(1.0, 1.0, 0.0)
+    glVertex3f(1.0, -1.0, 0.0)
+    glVertex3f(-1.0, -1.0, 0.0)
+    glEnd()
+    glTranslatef(3.0, 0.0, 0.0)
+    sph.draw()
+    glutSwapBuffers()
 
-def init():
-   # select clearing color
-   glClearColor (0.0, 0.0, 0.0, 0.0)
 
-   # initialize viewing values
-   glMatrixMode(GL_PROJECTION)
-   glLoadIdentity()
-   glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0)
+def mouseButton(button, mode, x, y):
+    if button == GLUT_RIGHT_BUTTON:
+        camera.mouselocation = [x, y]
 
-#  Declare initial window size, position, and display mode
-#  (single buffer and RGBA).  Open window with "hello"
-#  in its title bar.  Call initialization routines.
-#  Register callback function to display graphics.
-#  Enter main loop and process events.
+
+def ReSizeGLScene(Width, Height):
+    glViewport(0, 0, Width, Height)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(45.0, float(Width) / float(Height), 0.1, 100.0)
+    glMatrixMode(GL_MODELVIEW)
+
+
+def main():
+    global window
+    glutInit(sys.argv)
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
+    glutInitWindowSize(640, 400)
+    glutInitWindowPosition(40, 40)
+    window = glutCreateWindow("opengl")
+    glutDisplayFunc(DrawGLScene)
+    glutIdleFunc(DrawGLScene)
+    glutReshapeFunc(ReSizeGLScene)
+    glutMouseFunc(mouseButton)
+    glutMotionFunc(camera.mouse)
+    glutKeyboardFunc(camera.keypress)
+    glutSpecialFunc(camera.keypress)
+    InitGL(640, 480)
+    glutMainLoop()
+
 
 if __name__ == '__main__':
-    glutInit(sys.argv)
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
-    glutInitWindowSize(250, 250)
-    glutInitWindowPosition(100, 100)
-    glutCreateWindow("hello")
-    init()
-    glutDisplayFunc(display)
-    glutMainLoop()
+    main()
