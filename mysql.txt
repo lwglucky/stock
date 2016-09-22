@@ -1,0 +1,8 @@
+mysql only for py27 not for 34:
+
+
+
+pip install MySQL-Python
+pip install SQLAlchemy
+
+CREATE DATABASE IF NOT EXISTS yourdbname DEFAULT CHARSET utf8 COLLATE utf8_general_ci;

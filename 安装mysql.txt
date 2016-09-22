@@ -1,0 +1,4 @@
+http://jingyan.baidu.com/article/25648fc182a7a99191fd0096.html
+drop database stocku ;
+
+CREATE DATABASE IF NOT EXISTS stocku DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
