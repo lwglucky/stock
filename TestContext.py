@@ -153,12 +153,12 @@ class  TestContext  (  BaseContext ):
         BaseContext.Render( self, mode )
         glUseProgram(self.prog)
 
-        print      (glGetUniformLocation(self.prog, "lightPos") , ':' , self.lightpos)
-        print      (glGetUniformLocation(self.prog, "cameraPos"),  ':' ,self.campos)
+        # print      (glGetUniformLocation(self.prog, "lightPos") , ':' , self.lightpos)
+        # print      (glGetUniformLocation(self.prog, "cameraPos"),  ':' ,self.campos)
         glUniform3fv(glGetUniformLocation(self.prog, "lightPos"), 1,  self.lightpos)
         glUniform3fv(glGetUniformLocation(self.prog, "cameraPos"), 1,  self.campos)
 
-        print    (  glGetUniformLocation(self.prog, "m_view"), glGetUniformLocation(self.prog, "projection") , glGetUniformLocation(self.prog, "model"))
+        # print    (  glGetUniformLocation(self.prog, "m_view"), glGetUniformLocation(self.prog, "projection") , glGetUniformLocation(self.prog, "model"))
         glUniformMatrix4fv(glGetUniformLocation(self.prog, "m_view"), 1, GL_FALSE, self.viewmatrix)
         glUniformMatrix4fv(glGetUniformLocation(self.prog, "projection"), 1, GL_FALSE, self.projectmatrix)
         glUniformMatrix4fv(glGetUniformLocation(self.prog, "model"), 1, GL_FALSE, self.modelmatrix)

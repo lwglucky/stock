@@ -4,7 +4,7 @@
 
 DBURL = 'ec2-54-222-205-139.cn-north-1.compute.amazonaws.com.cn'
 SQLNAME = 'lwglucky'
-DBNAME = 'stocku'
+DBNAME =  'stocktest' # 'stocktest'  # 'stocku'
 DBPWD = 'lwglucky518518'
 
 def GetDbConnectionStr():
