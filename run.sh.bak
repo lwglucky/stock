@@ -1,0 +1,5 @@
+#!/bin/sh
+. /etc/profile
+. ~/.bash_profile
+
+python /home/lwglucky/stockpy/stockbase.py >> /home/lwglucky/stockpy/log.txt
